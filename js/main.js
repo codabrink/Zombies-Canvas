@@ -19,9 +19,12 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
         scale: 30
     },
     keys = {},
-    p;
+    p,
+    boxes = [];
 $(function() {
     p = new Player;
+    boxes.push(new Box(200, 200));
+    boxes.push(new Box(300, 300));
 
     document.onkeydown = function(e) {
         var key = e.which;

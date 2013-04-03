@@ -12,22 +12,22 @@ function Box(x, y) {
     fixDef.shape.SetAsBox(bConf['width'] / conf['scale'], 1 / conf['scale']);
 
     bodyDef.type = b2Body.b2_staticBody;
-    bodyDef.position.Set(x / conf['scale'], y / conf['scale']);
 
     //top
+    bodyDef.position.Set(x / conf['scale'], (y - bConf['height']) / conf['scale']);
     bodies.push(world.CreateBody(bodyDef));
     bodies.last.SetSleepingAllowed(true);
     bodies.last.CreateFixture(fixDef);
 
     //bottom
-    bodyDef.position.Set(x / conf['scale'], (y + height) / conf['scale']);
+    bodyDef.position.Set(x / conf['scale'], (y + bConf['height']) / conf['scale']);
     bodies.push(world.CreateBody(bodyDef));
     bodies.last.SetSleepingAllowed(true);
     bodies.last.CreateFixture(fixDef);
 
     //left
     fixDef.shape.SetAsBox(1 / conf['scale'], bConf['height'] / conf['scale']);
-    bodyDef.position.Set(x / conf['scale'], y / conf['scale']);
+    bodyDef.position.Set((x - bConf['width']) / conf['scale'], y / conf['scale']);
     bodies.push(world.CreateBody(bodyDef));
     bodies.last.SetSleepingAllowed(true);
     bodies.last.CreateFixture(fixDef);

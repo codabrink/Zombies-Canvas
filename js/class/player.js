@@ -2,21 +2,22 @@ function Player() {
     var pConf = {
         width : 10,
         height: 10,
-        force : 1000,
+        force : 10,
         rForce: 0.05
     },
         d = 0,
         r = 0;
     var fixDef = new b2FixtureDef();
-    fixDef.friction = 1;
 
     fixDef.shape = new b2PolygonShape();
     fixDef.shape.SetAsBox(conf['playerWidth'] / conf['scale'], conf['playerHeight'] / conf['scale']);
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
+    bodyDef.linearDamping = 1;
     bodyDef.position.Set(conf['canvasWidth'] / (2 * conf['scale']), conf['canvasHeight'] / (2 * conf['scale']));
 
     this.body = world.CreateBody(bodyDef);
+    this.body.SetSleepingAllowed(false);
     this.body.CreateFixture(fixDef);
     var vert, horiz;
 
@@ -31,11 +32,9 @@ function Player() {
     keys[37] = new Key(37, this.moveLeft, false);
 
     this.update = function() {
-        this.body.SetAwake(true);
         this.body.SetAngle(this.body.GetAngle() + r);
         horiz = Math.sin(-this.body.GetAngle()) * pConf['force'] * d;
         vert = Math.cos(this.body.GetAngle()) * pConf['force'] * d;
-        console.log(vert + ', '+horiz);
         this.body.ApplyForce(new b2Vec2(horiz,vert), this.body.GetWorldCenter());
     };
 };

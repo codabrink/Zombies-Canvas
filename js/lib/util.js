@@ -46,3 +46,15 @@ function pathBoxes() {
         }
     }
 }
+
+function camera() {
+
+    var es = conf['engineScale'],
+        ds = conf['drawScale'],
+        cw = conf['canvasWidth'],
+        ch = conf['canvasHeight'],
+        x = p.body.GetPosition().x,
+        y = p.body.GetPosition().y;
+
+    ctx.translate(cw / 2 - x, ch / 2 - y);
+}

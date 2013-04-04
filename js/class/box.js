@@ -7,7 +7,8 @@ function Box(x, y) {
         bodies = [],
         walls = [],
         ax = x,
-        ay = y;
+        ay = y,
+        room;
 
     this.pathed = false;
 
@@ -95,4 +96,14 @@ function Box(x, y) {
             break;
         }
     };
+
+    this.draw = function() {
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        for (var i=0;i<=3;i++) {
+            walls[i].draw();
+        }
+    };
+
+    //getters
+    this.conf = bConf;
 }

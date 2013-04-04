@@ -13,4 +13,9 @@ function Wall(side, x, y) {
         });
         sections = [];
     };
+    this.draw = function() {
+        for (var i=0;i<sections.length;i++) {
+            sections[i].draw();
+        }
+    };
 }

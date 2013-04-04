@@ -10,14 +10,14 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     b2DebugDraw = Box2D.Dynamics.b2DebugDraw,
     world = new b2World(new b2Vec2(0, 0), true),
     conf = {
-        canvasWidth : 1900,
-        canvasHeight: 1000,
+        canvasWidth : 1000,
+        canvasHeight: 500,
 
         playerWidth : 10,
         playerHeight: 10,
 
-        engineScale: 30,
-        drawScale: 20,
+        engineScale: 5,
+        drawScale: 2,
 
         framerate: 15,
 
@@ -25,9 +25,14 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     },
     keys = {},
     p,
-    boxes = [];
+    boxes = [],
+    c, ctx;
 $(function() {
-    $('#c').attr('width', conf['canvasWidth']).attr('height', conf['canvasHeight']);
+    c = $('#c');
+    ctx = c[0].getContext('2d');
+
+
+    c.attr('width', conf['canvasWidth']).attr('height', conf['canvasHeight']);
 
     p = new Player;
 
@@ -69,10 +74,21 @@ $(function() {
 });
 
 function update() {
+    ctx.clearRect(0, 0, c.width(), c.height());
+    ctx.save();
     world.Step(1/conf['framerate'], 3, 3);
     world.DrawDebugData();
     world.ClearForces();
 
+    camera();
+    for (var i=0;i<10;i++) {
+        for (var j=0;j<10;j++) {
+                boxes[i][j].draw();
+        }
+    }
+    p.draw();
+
     p.update();
+    ctx.restore();
 }
 

@@ -16,17 +16,23 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
         playerWidth : 10,
         playerHeight: 10,
 
-        engineScale: 5,
-        drawScale: 2,
+        engineScale: 30,
+        scale: 20,
+        drawScale: 20,
 
-        framerate: 15,
+        framerate: 60,
+        zoomSpeed: .01,
 
-        boxPathLimit: 7
+        boxPathLimit: 7,
+        roomSizeLimit: 7
+
     },
     keys = {},
     p,
     boxes = [],
-    c, ctx;
+    c, ctx,
+    ty, tx,
+    zoom = 1; //translated y and x
 $(function() {
     c = $('#c');
     ctx = c[0].getContext('2d');
@@ -43,6 +49,7 @@ $(function() {
         }
     }
     pathBoxes();
+    roomBoxes();
 
     document.onkeydown = function(e) {
         var key = e.which;
@@ -77,7 +84,7 @@ function update() {
     ctx.clearRect(0, 0, c.width(), c.height());
     ctx.save();
     world.Step(1/conf['framerate'], 3, 3);
-    world.DrawDebugData();
+//    world.DrawDebugData();
     world.ClearForces();
 
     camera();

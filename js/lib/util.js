@@ -17,6 +17,19 @@ Object.defineProperty(Array.prototype, 'popRandom', {
     set: undefined
 });
 
+Object.defineProperty(Array.prototype, 'remove', {
+    enumerable: false,
+    configurable: true,
+    get: function(e) {
+        for (var i=0;i<this.length;i++) {
+            if (this[i] === e) {
+                return this.splice(i, 1)[0];
+            }
+        }
+    },
+    set: undefined
+});
+
 function Key(key, onEvent, down) {
     var that = this;
     this.key = key;
@@ -47,6 +60,15 @@ function pathBoxes() {
     }
 }
 
+function roomBoxes() {
+    for (var i=0;i<10;i++) {
+        for (var j=0;j<10;j++) {
+            if (!boxes[i][j].roomed)
+                boxes[i][j].roomBox(new Room(), 1);
+        }
+    }
+}
+
 function camera() {
 
     var es = conf['engineScale'],
@@ -56,5 +78,14 @@ function camera() {
         x = p.body.GetPosition().x,
         y = p.body.GetPosition().y;
 
-    ctx.translate(cw / 2 - x, ch / 2 - y);
+    tx = cw / 2 - x * ds;
+    ty = ch / 2 - y * ds;
+    ctx.translate(tx, ty);
+
+    var newZoom = conf['scale'] - (p.body.GetLinearVelocity().Length() - 5) * .08;
+    if (newZoom > conf['drawScale']) {
+        conf['drawScale'] += conf['zoomSpeed'];
+    } else {
+        conf['drawScale'] -= conf['zoomSpeed'];
+    }
 }

@@ -39,9 +39,6 @@ function Player() {
     };
 
     this.draw = function() {
-        ctx.fillStyle = "rgba(0, 255, 0, 1)";
-
-        //ctx.rotate(this.body.GetAngle());
 
         var es = conf['engineScale'],
             ds = conf['drawScale'],
@@ -52,10 +49,21 @@ function Player() {
             x = this.body.GetPosition().x,
             y = this.body.GetPosition().y;
 
-        ctx.fillRect((x - w / es) * ds,
-                     (y - h / es) * ds,
+        ctx.fillStyle = "rgba(0, 255, 0, 1)";
+
+        var ttx = x * ds;
+        var tty = y * ds;
+
+        ctx.translate(ttx, tty);
+        ctx.rotate(this.body.GetAngle());
+
+        ctx.fillRect((-w / es) * ds,
+                     (-h / es) * ds,
                      (w / es * 2) * ds,
                      (h / es * 2) * ds);
+
+        //ctx.translate(-ttx, -tty);
+
     };
 
     //getters

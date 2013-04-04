@@ -3,18 +3,18 @@ function Player() {
         width : 10,
         height: 10,
         force : 10,
-        rForce: 0.05
+        rForce: 0.05 * (60 / conf['framerate'])
     },
         d = 0,
         r = 0;
     var fixDef = new b2FixtureDef();
 
     fixDef.shape = new b2PolygonShape();
-    fixDef.shape.SetAsBox(conf['playerWidth'] / conf['scale'], conf['playerHeight'] / conf['scale']);
+    fixDef.shape.SetAsBox(conf['playerWidth'] / conf['engineScale'], conf['playerHeight'] / conf['engineScale']);
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
     bodyDef.linearDamping = 1;
-    bodyDef.position.Set(conf['canvasWidth'] / (2 * conf['scale']), conf['canvasHeight'] / (2 * conf['scale']));
+    bodyDef.position.Set(conf['canvasWidth'] / (2 * conf['engineScale']), conf['canvasHeight'] / (2 * conf['engineScale']));
 
     this.body = world.CreateBody(bodyDef);
     this.body.SetSleepingAllowed(false);

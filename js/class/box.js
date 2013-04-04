@@ -4,6 +4,7 @@ function Box(x, y) {
         height: 100
     },
         bodies = [],
+        walls = [],
         ax = x,
         ay = y;
 
@@ -16,36 +17,25 @@ function Box(x, y) {
     var bodyDef = new b2BodyDef();
 
     fixDef.shape = new b2PolygonShape();
-    fixDef.shape.SetAsBox(bConf['width'] / conf['scale'], 1 / conf['scale']);
-
     bodyDef.type = b2Body.b2_staticBody;
 
     //top
-    bodyDef.position.Set(x / conf['scale'], (y - bConf['height']) / conf['scale']);
-    bodies.push(world.CreateBody(bodyDef));
-    bodies.last.SetSleepingAllowed(true);
-    bodies.last.CreateFixture(fixDef);
-
-    //bottom
-    bodyDef.position.Set(x / conf['scale'], (y + bConf['height']) / conf['scale']);
-    bodies.push(world.CreateBody(bodyDef));
-    bodies.last.SetSleepingAllowed(true);
-    bodies.last.CreateFixture(fixDef);
-
-    //left
-    fixDef.shape.SetAsBox(1 / conf['scale'], bConf['height'] / conf['scale']);
-    bodyDef.position.Set((x - bConf['width']) / conf['scale'], y / conf['scale']);
-    bodies.push(world.CreateBody(bodyDef));
-    bodies.last.SetSleepingAllowed(true);
-    bodies.last.CreateFixture(fixDef);
+    walls.push(new Wall(1));
+    walls.last.addSection(x, y - bConf['height'], bConf['width'], 1);
 
     //right
-    bodyDef.position.Set((x + bConf['width']) / conf['scale'], y / conf['scale']);
-    bodies.push(world.CreateBody(bodyDef));
-    bodies.last.SetSleepingAllowed(true);
-    bodies.last.CreateFixture(fixDef);
+    walls.push(new Wall(2));
+    walls.last.addSection(x + bConf['width'], y, 1, bConf['height']);
 
-    this.path = function(c) {
+    //bottom
+    walls.push(new Wall(3));
+    walls.last.addSection(x, y + bConf['height'], bConf['width'], 1);
+
+    //left
+    walls.push(new Wall(4));
+    walls.last.addSection(x - bConf['width'], y, 1, bConf['height']);
+
+    this.path = function(count) {
         this.pathed = true;
         var sides = [1, 2, 3, 4];
         while (sides.length > 0) {
@@ -64,15 +54,19 @@ function Box(x, y) {
                 b = boxes[ax-1][ay];
                 break;
             }
-            this.makeDoor(s);
-            s += 2;
-            if (s > 4)
-                s -= 4;
-            b.makeDoor(s);
+            if (typeof b !== 'undefined') {
+                this.makeDoor(s);
+                s += 2;
+                if (s > 4)
+                    s -= 4;
+                b.makeDoor(s);
+                break;
+            }
         }
     };
 
-    this.makeDoor = function(s) {
+    this.makeDoor = function(side) {
+        var wall = walls[side];
 
     };
 }

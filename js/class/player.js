@@ -3,7 +3,7 @@ function Player() {
         width : 10,
         height: 10,
         force : 10,
-        rForce: 0.05 * (60 / conf['framerate'])
+        rForce: 0.07 * (60 / conf['framerate'])
     },
         d = 0,
         r = 0;

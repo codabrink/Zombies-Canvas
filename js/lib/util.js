@@ -39,9 +39,8 @@ function Key(key, onEvent, down) {
 };
 
 function pathBoxes() {
-    for (var i=1;i<10;i++) {
-        boxes[i] = [];
-        for (var j=1;j<10;j++) {
+    for (var i=0;i<10;i++) {
+        for (var j=0;j<10;j++) {
             if (!boxes[i][j].pathed)
                 boxes[i][j].path(1);
         }

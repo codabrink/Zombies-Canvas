@@ -31,12 +31,13 @@ $(function() {
 
     p = new Player;
 
-    for (var i=1;i<10;i++) {
+    for (var i=0;i<10;i++) {
         boxes[i] = [];
-        for (var j=1;j<10;j++) {
+        for (var j=0;j<10;j++) {
             boxes[i].push(new Box(i, j));
         }
     }
+    pathBoxes();
 
     document.onkeydown = function(e) {
         var key = e.which;

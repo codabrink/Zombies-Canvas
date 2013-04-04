@@ -52,8 +52,8 @@ function Key(key, onEvent, down) {
 };
 
 function pathBoxes() {
-    for (var i=0;i<10;i++) {
-        for (var j=0;j<10;j++) {
+    for (var i=0;i<conf['gridWidth'];i++) {
+        for (var j=0;j<conf['gridHeight'];j++) {
             if (!boxes[i][j].pathed)
                 boxes[i][j].path(1);
         }
@@ -61,8 +61,8 @@ function pathBoxes() {
 }
 
 function roomBoxes() {
-    for (var i=0;i<10;i++) {
-        for (var j=0;j<10;j++) {
+    for (var i=0;i<conf['gridWidth'];i++) {
+        for (var j=0;j<conf['gridHeight'];j++) {
             if (!boxes[i][j].roomed)
                 boxes[i][j].roomBox(new Room(), 1);
         }
@@ -83,9 +83,9 @@ function camera() {
     ctx.translate(tx, ty);
 
     var newZoom = conf['scale'] - (p.body.GetLinearVelocity().Length() - 5) * .08;
-    if (newZoom > conf['drawScale']) {
+    if (newZoom > conf['drawScale'] + .01) {
         conf['drawScale'] += conf['zoomSpeed'];
-    } else {
+    } else if (newZoom < conf['drawScale'] - .01) {
         conf['drawScale'] -= conf['zoomSpeed'];
     }
 }

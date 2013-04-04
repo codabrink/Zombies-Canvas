@@ -24,15 +24,18 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
         zoomSpeed: .01,
 
         boxPathLimit: 7,
-        roomSizeLimit: 7
+        roomSizeLimit: 7,
+
+        gridHeight: 20,
+        gridWidth: 20
 
     },
     keys = {},
     p,
     boxes = [],
     c, ctx,
-    ty, tx,
-    zoom = 1; //translated y and x
+    ty, tx;
+
 $(function() {
     c = $('#c');
     ctx = c[0].getContext('2d');
@@ -42,9 +45,9 @@ $(function() {
 
     p = new Player;
 
-    for (var i=0;i<10;i++) {
+    for (var i=0;i<conf['gridWidth'];i++) {
         boxes[i] = [];
-        for (var j=0;j<10;j++) {
+        for (var j=0;j<conf['gridHeight'];j++) {
             boxes[i].push(new Box(i, j));
         }
     }
@@ -88,8 +91,8 @@ function update() {
     world.ClearForces();
 
     camera();
-    for (var i=0;i<10;i++) {
-        for (var j=0;j<10;j++) {
+    for (var i=0;i<conf['gridWidth'];i++) {
+        for (var j=0;j<conf['gridHeight'];j++) {
                 boxes[i][j].draw();
         }
     }

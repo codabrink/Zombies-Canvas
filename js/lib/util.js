@@ -29,6 +29,7 @@ Array.prototype.remove = function(e) {
 function Key(key, onEvent, down) {
     var that = this;
     this.key = key;
+    console.log(key);
     this.down = down;
     this.onEvent = onEvent;
     this.press = function(e) {

@@ -36,7 +36,8 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     boxes = [], zombies = [],
     c, ctx,
     scale = conf['drawScale'],
-    solids = [], zSolids = [];
+    solids = [], zSolids = [],
+    dark = false, darkHandle = false;
 
 var Lamp = illuminated.Lamp,
     RectangleObject = illuminated.RectangleObject,
@@ -112,15 +113,18 @@ function update() {
     camera();
     for (var i=0;i<conf['gridWidth'];i++) {
         for (var j=0;j<conf['gridHeight'];j++) {
-            boxes[i][j].draw();
+            if (!dark)
+                boxes[i][j].draw();
         }
     }
     for (var i=0;i<zombies.length;i++) {
         zombies[i].update();
-        zombies[i].draw();
+        if (!dark)
+            zombies[i].draw();
     }
     p.update();
-    p.draw();
+    if (!dark)
+        p.draw();
     ctx.restore();
 }
 

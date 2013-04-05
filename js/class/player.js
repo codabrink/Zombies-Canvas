@@ -1,4 +1,5 @@
 function Player() {
+    var that = this;
     var pConf = {
         width : 10,
         height: 10,
@@ -6,7 +7,11 @@ function Player() {
         rForce: 0.10 * (60 / conf['framerate'])
     },
         d = 0,
-        r = 0;
+        r = 0,
+        bullets = [],
+        es = conf['engineScale'],
+        ds = scale;
+
 
     var fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
@@ -25,11 +30,20 @@ function Player() {
     this.moveRight = function(down) {r = down ? pConf['rForce'] : 0;};
     this.moveUp = function(down) {d = down ? -1 : 0;};
     this.moveDown = function(down) {d = down ? 1 : 0;};
+    this.fireBullet = function() {
+        var angle = Math.PI - that.body.GetAngle();
+        var dx = Math.cos(angle);
+        var dy = Math.sin(angle);
+        var x = dx * pConf['width'] * 2 / es;
+        var y = dy * pConf['height'] * 2 / es;
+        bullets.push(new Bullet(that.body.GetPosition().x + x, that.body.GetPosition().y + y, dx, dy));
+    };
 
     keys[40] = new Key(40, this.moveDown, false);
     keys[39] = new Key(39, this.moveRight, false);
     keys[38] = new Key(38, this.moveUp, false);
     keys[37] = new Key(37, this.moveLeft, false);
+    keys[32] = new Key(32, this.fireBullet, false);
 
     this.light = new Lamp({
         position: new Vec2(this.body.GetPosition().x * scale, this.body.GetPosition().y * scale),
@@ -43,7 +57,6 @@ function Player() {
     });
 
     this.update = function() {
-        var es = conf['engineScale'],
             h = pConf['height'],
             w = pConf['width'];
 
@@ -59,12 +72,14 @@ function Player() {
 
     this.draw = function() {
         this.lighting.render(ctx);
-        var es = conf['engineScale'],
-            ds = scale,
-            h = pConf['height'],
+        var h = pConf['height'],
             w = pConf['width'],
             x = this.body.GetPosition().x,
             y = this.body.GetPosition().y;
+
+        for (var i=0;i<bullets.length;i++) {
+            bullets[i].draw();
+        }
 
         ctx.fillStyle = "rgba(0, 255, 0, .5)";
 
@@ -86,4 +101,5 @@ function Player() {
 
     //getters
     this.conf = pConf;
+    this.bullets = bullets;
 };

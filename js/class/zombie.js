@@ -12,13 +12,13 @@ function Zombie(x, y) {
         followMinDistance: 120,
         followMaxDistance: 170,
 
-        interestDistance: 200,
+        interestDistance: 400,
         interestTime: 7000
     };
 
     var fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
-    fixDef.shape.SetAsBox(conf['playerWidth'] / conf['engineScale'], conf['playerHeight'] / conf['engineScale']);
+    fixDef.shape.SetAsBox(zConf['width'] / conf['engineScale'], zConf['height'] / conf['engineScale']);
     var bodyDef = new b2BodyDef();
     bodyDef.type = b2Body.b2_dynamicBody;
     bodyDef.linearDamping = 1;
@@ -36,10 +36,11 @@ function Zombie(x, y) {
         this.body.ApplyForce(this.dir, this.body.GetWorldCenter());
         this.d = Math.sqrt(Math.pow(p.body.GetPosition().x - this.body.GetPosition().x, 2) + Math.pow(p.body.GetPosition().y - this.body.GetPosition().y, 2));
 
-        if (!this.interested && this.interestable && this.d < zConf['interestDistance'] / es && Math.random() < 0.005) {
+        if (!this.interested && this.interestable && this.d < zConf['interestDistance'] / es && Math.random() < 0.01) {
             clearTimeout(this.timeout);
             this.interested = true;
             console.log('interested');
+            this.flicker();
             this.timeout = setTimeout(function() {
                 console.log('not interested');
                 that.interested = false;
@@ -81,6 +82,17 @@ function Zombie(x, y) {
         var dx = x - this.body.GetPosition().x;
         var dy = y - this.body.GetPosition().y;
         this.dir = new Vec2(dx * zConf['followSpeed'], dy * zConf['followSpeed']);
+
+    };
+
+    this.flicker = function() {
+        var setTime = zConf['interestTime'];
+        var outTime = 500;
+        darkHandle = true;
+        setTimeout(function() {darkHandle = false;}, setTime + outTime);
+        if (Math.random() < .7) return;
+
+        setTimeout(function() {dark = true;setTimeout(function() {dark = false;}, Math.random() * outTime);}, Math.random() * setTime);
     };
 
     this.draw = function() {
@@ -94,7 +106,11 @@ function Zombie(x, y) {
             x = this.body.GetPosition().x,
             y = this.body.GetPosition().y;
 
-        ctx.fillStyle = "rgba(255, 0, 0,"+o+")";
+        if (this.interested)
+            ctx.fillStyle = "rgba(255, 0, 255,"+o+")";
+        else
+            ctx.fillStyle = "rgba(0, 0, 255,"+o+")";
+
         ctx.fillRect((x - w / es) * ds,
                      (y - h / es) * ds,
                      (w / es * 2) * ds,

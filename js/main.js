@@ -4,6 +4,7 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     b2FixtureDef = Box2D.Dynamics.b2FixtureDef,
     b2Fixture = Box2D.Dynamics.b2Fixture,
     b2World = Box2D.Dynamics.b2World,
+    b2ContactListener = Box2D.Dynamics.b2ContactListener,
     b2MassData = Box2D.Collision.Shapes.b2MassData,
     b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape,
     b2CircleShape = Box2D.Collision.Shapes.b2CircleShape,
@@ -45,11 +46,20 @@ var Lamp = illuminated.Lamp,
     Vec2 = illuminated.Vec2,
     Lighting = illuminated.Lighting;
 
+var temp;
+
 $(function() {
     //handle new canvas
     c = $('#c');
     ctx = c[0].getContext('2d');
     c.attr('width', conf['canvasWidth']).attr('height', conf['canvasHeight']);
+
+    b2ContactListener.BeginContact = function(contact) {};
+    b2ContactListener.EndContact = function(contact) {};
+    b2ContactListener.PostSolve = function(contact, impulse) {};
+    b2ContactListener.PreSolve = function(contact, oldManifold) {};
+
+    world.SetContactListener(b2ContactListener);
 
     //populate the field
     p = new Player;
@@ -96,6 +106,7 @@ $(function() {
 
     window.setInterval(update, 1000 / conf['framerate']);
 });
+
 
 function update() {
     ctx.clearRect(0, 0, c.width(), c.height());

@@ -18,6 +18,7 @@ function Bullet(x, y, dy, dx) {
     this.body = world.CreateBody(bodyDef);
     this.body.SetSleepingAllowed(false);
     this.body.CreateFixture(fixDef);
+    this.body.SetUserData({name:'bullet'});
 
     this.body.ApplyImpulse(new b2Vec2(dx * bConf['speed'], dy * bConf['speed']), this.body.GetWorldCenter());
 

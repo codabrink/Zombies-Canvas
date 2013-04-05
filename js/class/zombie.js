@@ -27,6 +27,7 @@ function Zombie(x, y) {
     this.body = world.CreateBody(bodyDef);
     this.body.SetSleepingAllowed(false);
     this.body.CreateFixture(fixDef);
+    this.body.SetUserData({name:'zombie'});
     this.timeout = null;
     this.interested = false;
     this.interestable = true;

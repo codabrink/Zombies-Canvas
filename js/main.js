@@ -26,15 +26,17 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
         roomSizeLimit: 3,
 
         gridHeight: 20,
-        gridWidth: 20
+        gridWidth: 20,
+
+        numZombies: 20
 
     },
     keys = {},
     p,
-    boxes = [],
+    boxes = [], zombies = [],
     c, ctx,
     scale = conf['drawScale'],
-    solids = [];
+    solids = [], zSolids = [];
 
 var Lamp = illuminated.Lamp,
     RectangleObject = illuminated.RectangleObject,
@@ -56,6 +58,12 @@ $(function() {
             boxes[i].push(new Box(i, j));
         }
     }
+    var maxX = conf['gridWidth'] * 200;
+    var maxY = conf['gridHeight'] * 200;
+    for (var i=0;i<conf['numZombies'];i++) {
+        zombies.push(new Zombie(Math.random() * maxX, Math.random() * maxY));
+    }
+
     pathBoxes();
     roomBoxes();
 
@@ -92,7 +100,8 @@ function update() {
     ctx.clearRect(0, 0, c.width(), c.height());
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, c.width(), c.height());
-    p.update();
+
+    zSolids = [];
 
     world.Step(1/conf['framerate'], 3, 3);
     //    world.DrawDebugData();
@@ -106,6 +115,11 @@ function update() {
             boxes[i][j].draw();
         }
     }
+    for (var i=0;i<zombies.length;i++) {
+        zombies[i].update();
+        zombies[i].draw();
+    }
+    p.update();
     p.draw();
     ctx.restore();
 }

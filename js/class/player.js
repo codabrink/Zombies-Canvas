@@ -34,7 +34,8 @@ function Player() {
     this.light = new Lamp({
         position: new Vec2(this.body.GetPosition().x * scale, this.body.GetPosition().y * scale),
         distance: 200,
-        radius: 10
+        radius: 10,
+        samples: 20
     });
     this.lighting = new Lighting({
         light: this.light,
@@ -43,8 +44,6 @@ function Player() {
 
     this.update = function() {
         var es = conf['engineScale'],
-            cw = conf['canvasWidth'],
-            ch = conf['canvasHeight'],
             h = pConf['height'],
             w = pConf['width'];
 
@@ -54,7 +53,7 @@ function Player() {
         this.body.ApplyForce(new b2Vec2(horiz,vert), this.body.GetWorldCenter());
 
         this.light.position = new Vec2(this.body.GetPosition().x * scale, this.body.GetPosition().y * scale);
-        this.lighting.objects = solids;
+        this.lighting.objects = solids.concat(zSolids);
         this.lighting.compute(conf['canvasWidth'] * 3, conf['canvasHeight'] * 6);
     };
 
@@ -62,8 +61,6 @@ function Player() {
         this.lighting.render(ctx);
         var es = conf['engineScale'],
             ds = scale,
-            cw = conf['canvasWidth'],
-            ch = conf['canvasHeight'],
             h = pConf['height'],
             w = pConf['width'],
             x = this.body.GetPosition().x,
@@ -77,6 +74,12 @@ function Player() {
                      (-h / es) * ds,
                      (w / es * 2) * ds,
                      (h / es * 2) * ds);
+        ctx.fillStyle = '#999999';
+        ctx.fillRect((w * .5 / es) * ds,
+                     (-h * 1.75 / es) * ds,
+                     (w / es) * ds,
+                     (h * 2 / es) * ds);
+
         //ctx.translate(-x, -y);
 
     };

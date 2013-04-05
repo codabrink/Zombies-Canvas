@@ -7,8 +7,8 @@ function Player() {
     },
         d = 0,
         r = 0;
-    var fixDef = new b2FixtureDef();
 
+    var fixDef = new b2FixtureDef();
     fixDef.shape = new b2PolygonShape();
     fixDef.shape.SetAsBox(conf['playerWidth'] / conf['engineScale'], conf['playerHeight'] / conf['engineScale']);
     var bodyDef = new b2BodyDef();
@@ -31,17 +31,37 @@ function Player() {
     keys[38] = new Key(38, this.moveUp, false);
     keys[37] = new Key(37, this.moveLeft, false);
 
+    this.light = new Lamp({
+        position: new Vec2(this.body.GetPosition().x * scale, this.body.GetPosition().y * scale),
+        distance: 200,
+        radius: 10
+    });
+    this.lighting = new Lighting({
+        light: this.light,
+        objects: []
+    });
+
     this.update = function() {
+        var es = conf['engineScale'],
+            cw = conf['canvasWidth'],
+            ch = conf['canvasHeight'],
+            h = pConf['height'],
+            w = pConf['width'];
+
         this.body.SetAngle(this.body.GetAngle() + r);
         horiz = Math.sin(-this.body.GetAngle()) * pConf['force'] * d;
         vert = Math.cos(this.body.GetAngle()) * pConf['force'] * d;
         this.body.ApplyForce(new b2Vec2(horiz,vert), this.body.GetWorldCenter());
+
+        this.light.position = new Vec2(this.body.GetPosition().x * scale, this.body.GetPosition().y * scale);
+        this.lighting.objects = solids;
+        this.lighting.compute(conf['canvasWidth'] * 3, conf['canvasHeight'] * 6);
     };
 
     this.draw = function() {
-
+        this.lighting.render(ctx);
         var es = conf['engineScale'],
-            ds = conf['drawScale'],
+            ds = scale,
             cw = conf['canvasWidth'],
             ch = conf['canvasHeight'],
             h = pConf['height'],
@@ -49,20 +69,15 @@ function Player() {
             x = this.body.GetPosition().x,
             y = this.body.GetPosition().y;
 
-        ctx.fillStyle = "rgba(0, 255, 0, 1)";
+        ctx.fillStyle = "rgba(0, 255, 0, .5)";
 
-        var ttx = x * ds;
-        var tty = y * ds;
-
-        ctx.translate(ttx, tty);
+        ctx.translate(x * ds, y * ds);
         ctx.rotate(this.body.GetAngle());
-
         ctx.fillRect((-w / es) * ds,
                      (-h / es) * ds,
                      (w / es * 2) * ds,
                      (h / es * 2) * ds);
-
-        //ctx.translate(-ttx, -tty);
+        //ctx.translate(-x, -y);
 
     };
 

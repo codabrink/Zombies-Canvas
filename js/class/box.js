@@ -14,8 +14,8 @@ function Box(x, y) {
     this.pathed = false;
     this.roomed = false;
 
-    x *= bConf['width'] * 2;
-    y *= bConf['height'] * 2;
+    x = (x + 1) * bConf['width'] * 2;
+    y = (y + 1) * bConf['height'] * 2;
 
     var fixDef = new b2FixtureDef();
     var bodyDef = new b2BodyDef();
@@ -137,7 +137,6 @@ function Box(x, y) {
 
 
     this.draw = function() {
-        ctx.fillStyle = "rgba(0,0,0,1)";
         for (var i=0;i<=3;i++) {
             walls[i].draw();
         }

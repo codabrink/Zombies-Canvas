@@ -17,18 +17,14 @@ Object.defineProperty(Array.prototype, 'popRandom', {
     set: undefined
 });
 
-Object.defineProperty(Array.prototype, 'remove', {
-    enumerable: false,
-    configurable: true,
-    get: function(e) {
-        for (var i=0;i<this.length;i++) {
-            if (this[i] === e) {
-                return this.splice(i, 1)[0];
-            }
+Array.prototype.remove = function(e) {
+    for (var i=0;i<this.length;i++) {
+        if (this[i] === e) {
+            return this.splice(i, 1)[0];
         }
-    },
-    set: undefined
-});
+    }
+    return null;
+};
 
 function Key(key, onEvent, down) {
     var that = this;
@@ -70,7 +66,6 @@ function roomBoxes() {
 }
 
 function camera() {
-
     var es = conf['engineScale'],
         ds = conf['drawScale'],
         cw = conf['canvasWidth'],
@@ -78,14 +73,7 @@ function camera() {
         x = p.body.GetPosition().x,
         y = p.body.GetPosition().y;
 
-    tx = cw / 2 - x * ds;
-    ty = ch / 2 - y * ds;
+    var tx = cw / 2 - x * scale;
+    var ty = ch / 2 - y * scale;
     ctx.translate(tx, ty);
-
-    var newZoom = conf['scale'] - (p.body.GetLinearVelocity().Length() - 5) * .08;
-    if (newZoom > conf['drawScale'] + .01) {
-        conf['drawScale'] += conf['zoomSpeed'];
-    } else if (newZoom < conf['drawScale'] - .01) {
-        conf['drawScale'] -= conf['zoomSpeed'];
-    }
 }

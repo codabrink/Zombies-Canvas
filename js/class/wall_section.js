@@ -15,8 +15,14 @@ function WallSection(x, y, w, h) {
     this.body.CreateFixture(fixDef);
 
     this.draw = function() {
+        var d = Math.sqrt(Math.pow(p.body.GetPosition().x - this.body.GetPosition().x, 2) + Math.pow(p.body.GetPosition().y - this.body.GetPosition().y, 2));
+        var o = 3 / d;
+
+        ctx.fillStyle = "rgba(255,255,255,"+o+")";
+
+
         var es = conf['engineScale'],
-            ds = conf['drawScale'],
+            ds = scale,
             h = this.h,
             w = this.w,
             x = this.body.GetPosition().x,
@@ -26,4 +32,12 @@ function WallSection(x, y, w, h) {
                      (w / es * 2) * ds,
                      (h / es * 2) * ds);
     };
+
+    var es = conf['engineScale'],
+        ds = scale;
+
+    this.rect = new RectangleObject({
+        topleft: new Vec2((this.x - this.w) / es * ds, (this.y - this.h) / es * ds),
+        bottomright: new Vec2((this.x + this.w) / es * ds, (this.y + this.h) / es * ds)
+    });
 }

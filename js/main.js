@@ -17,14 +17,13 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
         playerHeight: 10,
 
         engineScale: 30,
-        scale: 20,
         drawScale: 20,
 
         framerate: 60,
         zoomSpeed: .01,
 
         boxPathLimit: 7,
-        roomSizeLimit: 7,
+        roomSizeLimit: 3,
 
         gridHeight: 20,
         gridWidth: 20
@@ -34,17 +33,23 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2,
     p,
     boxes = [],
     c, ctx,
-    ty, tx;
+    scale = conf['drawScale'],
+    solids = [];
+
+var Lamp = illuminated.Lamp,
+    RectangleObject = illuminated.RectangleObject,
+    DiscObject = illuminated.DiscObject,
+    Vec2 = illuminated.Vec2,
+    Lighting = illuminated.Lighting;
 
 $(function() {
+    //handle new canvas
     c = $('#c');
     ctx = c[0].getContext('2d');
-
-
     c.attr('width', conf['canvasWidth']).attr('height', conf['canvasHeight']);
 
+    //populate the field
     p = new Player;
-
     for (var i=0;i<conf['gridWidth'];i++) {
         boxes[i] = [];
         for (var j=0;j<conf['gridHeight'];j++) {
@@ -54,6 +59,7 @@ $(function() {
     pathBoxes();
     roomBoxes();
 
+    //handle entire keyboard
     document.onkeydown = function(e) {
         var key = e.which;
         if (key in keys) {
@@ -72,7 +78,6 @@ $(function() {
     };
 
     var debugDraw = new b2DebugDraw();
-
     debugDraw.SetSprite(document.getElementById('c').getContext("2d"));
     debugDraw.SetDrawScale(conf['drawScale']);
     debugDraw.SetFillAlpha(0.3);
@@ -85,20 +90,23 @@ $(function() {
 
 function update() {
     ctx.clearRect(0, 0, c.width(), c.height());
-    ctx.save();
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, c.width(), c.height());
+    p.update();
+
     world.Step(1/conf['framerate'], 3, 3);
-//    world.DrawDebugData();
+    //    world.DrawDebugData();
     world.ClearForces();
 
+    //p.lighting.render(ctx);
+    ctx.save();
     camera();
     for (var i=0;i<conf['gridWidth'];i++) {
         for (var j=0;j<conf['gridHeight'];j++) {
-                boxes[i][j].draw();
+            boxes[i][j].draw();
         }
     }
     p.draw();
-
-    p.update();
     ctx.restore();
 }
 

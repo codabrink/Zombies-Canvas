@@ -58,7 +58,7 @@ function Box(x, y) {
 
     this.roomWalls = function() {
         for (var i=0;i<this.adj.length;i++) {
-            if (this.adj[i].room == this.room) {
+            if (typeof this.adj[i] !== 'undefined' && this.adj[i].room == this.room) {
                 this.destroyWall(i);
                 this.adj[i].destroyWall(reverseSide(i));
             }

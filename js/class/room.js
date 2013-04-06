@@ -19,6 +19,8 @@ function Room(box) {
 
     for (var i=0;i<Math.floor(Math.random() * rConf['size']);i++) {
         var adj = this.getAdjacent();
+        if (adj.length === 0)
+            break;
         var box = adj.popRandom[0];
         this.boxes.push(box);
         box.room = this;

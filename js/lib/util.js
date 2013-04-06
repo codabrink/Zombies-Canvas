@@ -26,10 +26,18 @@ Array.prototype.remove = function(e) {
     return null;
 };
 
+Array.prototype.exists = function(e) {
+    for (var i=0;i<this.length;i++) {
+        if (this[i] === e) {
+            return [true, i];
+        }
+    }
+    return [false, -1];
+};
+
 function Key(key, onEvent, down) {
     var that = this;
     this.key = key;
-    console.log(key);
     this.down = down;
     this.onEvent = onEvent;
     this.press = function(e) {
@@ -48,6 +56,13 @@ function Key(key, onEvent, down) {
     };
 };
 
+function reverseSide(s) {
+    s += 2;
+    if (s > 3)
+            s -= 4;
+    return s;
+}
+
 function pathBoxes() {
     for (var i=0;i<conf['gridWidth'];i++) {
         for (var j=0;j<conf['gridHeight'];j++) {
@@ -60,8 +75,8 @@ function pathBoxes() {
 function roomBoxes() {
     for (var i=0;i<conf['gridWidth'];i++) {
         for (var j=0;j<conf['gridHeight'];j++) {
-            if (!boxes[i][j].roomed)
-                boxes[i][j].roomBox(new Room(), 1);
+            if (typeof boxes[i][j].room === 'undefined')
+                new Room(boxes[i][j]);
         }
     }
 }

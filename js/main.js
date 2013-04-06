@@ -69,6 +69,11 @@ $(function() {
             boxes[i].push(new Box(i, j));
         }
     }
+    for (var i=0;i<conf['gridWidth'];i++) {
+        for (var j=0;j<conf['gridHeight'];j++) {
+            boxes[i][j].setAdj();
+        }
+    }
     var maxX = conf['gridWidth'] * 200;
     var maxY = conf['gridHeight'] * 200;
     for (var i=0;i<conf['numZombies'];i++) {
@@ -78,7 +83,7 @@ $(function() {
     pathBoxes();
     roomBoxes();
 
-    //handle entire keyboard
+    //handle keyboard
     document.onkeydown = function(e) {
         var key = e.which;
         if (key in keys) {
